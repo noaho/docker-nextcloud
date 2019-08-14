@@ -1,0 +1,16 @@
+#!/usr/bin/with-contenv bash
+
+#Multiple services, so maybe this isn't the way to go
+# # If config doesn't exist yet, start for 10 seconds to build config, then stop.
+# if ! [ -f /config/www/nextcloud/config/config.php ]; then
+# 	#Start
+# 	/etc/services.d/nextcloud/run &
+# 	sleep 30
+# 	kill $!
+# 	sleep 20
+# fi
+
+#Set urlbase settings
+echo $URL
+
+php /phpsed.php '/(?!overwritewebroot)\K(?=\);)/' "  'trusted_proxies' => ['letsencrypt'],\n  'overwritewebroot' => '/nextcloud',\n  'overwrite.cli.url' => 'https://$URL/nextcloud',\n" /config/www/nextcloud/config/config.php
